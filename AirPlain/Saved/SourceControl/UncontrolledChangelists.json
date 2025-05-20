@@ -14,15 +14,22 @@
 				"C:/cording/L20250520-AirPlain/AirPlain/Content/Resources/P38Diffuse_Mat.uasset",
 				"C:/cording/L20250520-AirPlain/AirPlain/Content/Resources/Mt_P38_inst.uasset",
 				"C:/cording/L20250520-AirPlain/AirPlain/Content/Resources/SM_P38_Body.uasset",
-				"C:/cording/L20250520-AirPlain/AirPlain/Content/Resources/P38DiffusePropeller_Mat.uasset",
 				"C:/cording/L20250520-AirPlain/AirPlain/Content/Resources/Mt_Propeller_inst.uasset",
 				"C:/cording/L20250520-AirPlain/AirPlain/Content/Resources/SM_P38_Propeller.uasset",
-				"C:/cording/L20250520-AirPlain/AirPlain/Content/Resources/Mt_Rocket_inst1.uasset",
 				"C:/cording/L20250520-AirPlain/AirPlain/Content/Resources/Mt_Rocket_inst.uasset",
 				"C:/cording/L20250520-AirPlain/AirPlain/Content/Blueprints/BP_PropellerConp.uasset",
 				"C:/cording/L20250520-AirPlain/AirPlain/Content/Blueprints/BP_Rocket.uasset",
 				"C:/cording/L20250520-AirPlain/AirPlain/Content/Resources/SM_Rocket.uasset",
-				"C:/cording/L20250520-AirPlain/AirPlain/Content/Blueprints/GMB_AirFight.uasset"
+				"C:/cording/L20250520-AirPlain/AirPlain/Content/Blueprints/GMB_AirFight.uasset",
+				"C:/cording/L20250520-AirPlain/AirPlain/Content/StarterContent/Architecture/Floor_400x400.uasset",
+				"C:/cording/L20250520-AirPlain/AirPlain/Content/Blueprints/BP_Controller.uasset",
+				"C:/cording/L20250520-AirPlain/AirPlain/Content/StarterContent/Particles/P_Explosion1.uasset",
+				"C:/cording/L20250520-AirPlain/AirPlain/Content/StarterContent/Audio/Collapse_Cue.uasset",
+				"C:/cording/L20250520-AirPlain/AirPlain/Content/StarterContent/Audio/NewMetaSoundSource.uasset",
+				"C:/cording/L20250520-AirPlain/AirPlain/Content/Blueprints/BP_Effect.uasset",
+				"C:/cording/L20250520-AirPlain/AirPlain/Content/Blueprints/BP_Target.uasset",
+				"C:/cording/L20250520-AirPlain/AirPlain/Content/Resources/P38DiffusePropeller_Mat.uasset",
+				"C:/cording/L20250520-AirPlain/AirPlain/Content/Resources/Mt_Rocket_inst1.uasset"
 			]
 		}
 	]
