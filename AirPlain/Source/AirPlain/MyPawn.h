@@ -14,6 +14,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UArrowComponent;
 class UFloatingPawnMovement;
+class AMyActor;
 
 
 UCLASS()
@@ -37,14 +38,21 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void Fire();
+
+	void Roll(float Value);
+	void Pitch(float Value);
+	void DoBoost();
+	void UnBoost();
 
 
-UPROPERTY(VisibleAnywhere,Category = "Components",BlueprintReadOnly)//이 뒤에는 언리얼에서 사용하는 프로퍼티
-//VisibleAnywhere는 현재 이 변수를 어디서나 볼 수 있음-보통 컴포넌트
+	//VisibleAnywhere는 현재 이 변수를 어디서나 볼 수 있음-보통 컴포넌트
 // EditAnywhere - 현재 이 변수를 어디서나 조작할 수 있음
 // Category - 변수의 항목을 나눠서 들어감
 // BlueprintReadOnly - 겟만 할 수 있음
 	//TObjectptr<UBoxComponent> Box ; 이-> 언리얼에서 관리
+UPROPERTY(VisibleAnywhere,Category = "Components",BlueprintReadOnly)//이 뒤에는 언리얼에서 사용하는 프로퍼티
+
 TObjectPtr<UBoxComponent> Box; //  언리얼의 박스 컴포넌트  항상 포인터 사용한다. UBoxComponent 형 Box
 
 UPROPERTY(VisibleAnywhere, Category = "Components", BlueprintReadWrite)
@@ -80,5 +88,9 @@ TObjectPtr< UFloatingPawnMovement > Movement;
 
  UPROPERTY(EditAnywhere, Category = "Data", BlueprintReadWrite)
  float Boost = 0.5f;
+
+
+ UPROPERTY(EditAnywhere, Category = "Data", BlueprintReadWrite)
+ TSubclassOf<AMyActor>RocketTemplate;
 
 };

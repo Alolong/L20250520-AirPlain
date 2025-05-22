@@ -23,21 +23,17 @@ AMyActor::AMyActor()
 	Body = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
 	Body->SetupAttachment(Box); // 박스에 붙이기
 	//오브젝트  SM_Body로 붙이기 
-	// static ConstructorHelpers 구조체의 매크로
+	// static ConstructorHelpers 구조체의 템플릿
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_Body(TEXT("/Script/Engine.StaticMesh'/Game/Resources/SM_Rocket.SM_Rocket'"));
 
 	if (SM_Body.Succeeded()) //SM_Body가 이식 성공하면
 	{
 		Body->SetStaticMesh(SM_Body.Object); //Staticmesh를 저장하는 함수 실행 
 	}
-	Body->SetRelativeRotation(FRotator(-90.0f, 0, 0)); // body의 relativerotation을 저장하낟.
+	Body->SetRelativeRotation(FRotator(-90.0f, 0, 0)); // body의 relativerotation을 저장한다.
 
 
 
-
-
-
-	Movement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
 
 	Movement->InitialSpeed = 2000.0f;
 	Movement->MaxSpeed = 2000.0f;
@@ -52,6 +48,10 @@ void AMyActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
+
+	SetLifeSpan(3.0f);
+
+
 }
 
 // Called every frame
@@ -59,5 +59,17 @@ void AMyActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AMyActor::Test()
+{
+}
+
+void AMyActor::ProcessBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
+{
+}
+
+void AMyActor::CallCPPToExcuteBP(int Damage)
+{
 }
 

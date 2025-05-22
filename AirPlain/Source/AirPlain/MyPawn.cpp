@@ -8,7 +8,8 @@
 #include "Components/ArrowComponent.h"
 #include "GameFramework/FloatingPawnMovement.h"
 #include "GameFramework/SpringArmComponent.h"
-
+#include "MyActor.h"
+#include "Kismet/GameplayStatics.h"
 //전방선언
 
 
@@ -26,12 +27,15 @@ AMyPawn::AMyPawn()
 	Body->SetupAttachment(Box); // 박스에 붙이기
 
 	
-	
 
 	//생성자에서만 동작
-//	static 그래픽자료형 변수(TEXT("경로"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_Body(TEXT("/Script/Engine.StaticMesh'/Game/Resources/SM_P38_Body.SM_P38_Body'"));
+	// 스태틱 메시 컴포넌트에 스태틱 메시를 불러오기
+	// 
+	//	static 그래픽자료형 변수(TEXT("경로"));
 	//ConstructorHelpers 에 있는 FObjectFinde 자료형 // SMbody 변수명 ///생성자 text
+	//모델링 불러올 때는 UStaticMesh로 - Component아님 주의
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_Body(TEXT("/Script/Engine.StaticMesh'/Game/Resources/SM_P38_Body.SM_P38_Body'"));
+
 	if (SM_Body.Succeeded()) //  성공이니?
 	{
 		Body->SetStaticMesh(SM_Body.Object);
@@ -45,6 +49,8 @@ AMyPawn::AMyPawn()
 	Right = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Right"));
 	Right->SetupAttachment(Box); // 박스에 붙이기
 
+
+	//프로펠러 스태틱메시를 컴포넌트에 부르고 FVector 위치에 놓기
 		static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_Propeller(TEXT("/Script/Engine.StaticMesh'/Game/Resources/SM_P38_Propeller.SM_P38_Propeller'"));
 	if (SM_Propeller.Succeeded())
 	{
@@ -54,6 +60,12 @@ AMyPawn::AMyPawn()
 
 	Left->SetRelativeLocation(FVector(37.571327f, -21.000000f, 1.328775f));
 	Right->SetRelativeLocation(FVector(37.571327f, 21.000000f, 1.328775f));
+
+
+
+
+
+
 
 
 	///////////////////////////////////////////////////////
@@ -76,6 +88,11 @@ AMyPawn::AMyPawn()
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm); // 박스에 붙이기
+
+
+
+
+
 
 	//변수 초기화
 	Boost = 0.5f;
@@ -101,6 +118,12 @@ void AMyPawn::Tick(float DeltaTime)
 
 	AddMovementInput(GetActorForwardVector(), Boost);
 
+	//프로펠러 회전
+	Left->AddLocalRotation(FRotator(0, 0, 7200 * UGameplayStatics::GetWorldDeltaSeconds(GetWorld())));
+	Right->AddLocalRotation(FRotator(0, 0, 7200 * UGameplayStatics::GetWorldDeltaSeconds(GetWorld())));
+
+
+
 }
 
 // Called to bind functionality to input
@@ -108,5 +131,53 @@ void AMyPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+
+	PlayerInputComponent->BindAction(TEXT("Fire"), EInputEvent:: IE_Released ,this,& AMyPawn::Fire);
+	PlayerInputComponent->BindAction(TEXT("Boost"), EInputEvent::IE_Released, this, &AMyPawn::DoBoost);
+	PlayerInputComponent->BindAction(TEXT("UnBoost"), EInputEvent::IE_Released, this, &AMyPawn::UnBoost);
+
+		
+	PlayerInputComponent->BindAxis(TEXT("Roll"), this, & AMyPawn::AddControllerPitchInput);
+	PlayerInputComponent->BindAxis(TEXT("Pitch"), this, &AMyPawn::AddControllerPitchInput);
 }
 
+
+void AMyPawn::Fire()
+{
+	//문법 : CDO 포인터를 가리킴 
+	//의미 : 클래스 이름을 저장하고 싶다.
+	RocketTemplate = AMyActor :: StaticClass();
+	GetWorld()->SpawnActor<AMyActor>(AMyActor::StaticClass(), Arrow->K2_GetComponentToWorld());
+
+	
+
+
+
+}
+
+void AMyPawn::Roll(float Value)
+{
+	//AddActorLocalRotation(FRotator DeltaRotation, bool bSweep, FHitResult* OutSweepHitResult, ETeleportType Teleport) 
+	//AddActorLocalRotation(FRotator(0, 0, 0)) 
+	//Roll 하는 값  = FMath::Clamp(Value, -1.0f, 1.0f) * RotateSpeed * UGameplayStatics::GetWorldDeltaSeconds(GetWorld())
+	// clamp 범위 설정 * RotateSpeed변수 * 월드 델타세컨드 
+
+	AddActorLocalRotation(FRotator(0, 
+		0,
+		FMath::Clamp(Value, -1.0f, 1.0f) * RotateSpeed * UGameplayStatics::GetWorldDeltaSeconds(GetWorld())));
+}
+
+void AMyPawn::Pitch(float Value)
+{
+	AddActorLocalRotation(FRotator(FMath::Clamp(Value, -1.0f, 1.0f) * RotateSpeed * UGameplayStatics::GetWorldDeltaSeconds(GetWorld()), 0, 0));
+}
+
+void AMyPawn::DoBoost()
+{
+	Boost = 1.0f;
+}
+
+void AMyPawn::UnBoost()
+{
+	Boost = 0.5f;
+}

@@ -31,8 +31,8 @@ public:
 
 
 
-	//매크로<선언한 클래스>  변수명
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Components")
+	//템플릿<선언한 클래스>  변수명
+		UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Components")
 		TObjectPtr<UBoxComponent> Box; // TObject 매크로의 박스 컴포넌트형의 box를 선언
 
 		UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Components")
@@ -40,5 +40,29 @@ public:
 
 		UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Components")
 		TObjectPtr<UProjectileMovementComponent> Movement; //TObject 매크로의 박스 컴포넌트형의 box를 선언
-	 
+	
+		//블루프린트에서 호출 가능
+		UFUNCTION(BlueprintCallable)
+		void Test();
+		
+
+
+		//
+		UFUNCTION()
+		void ProcessBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
+
+		UFUNCTION(BlueprintImplementableEvent)
+
+		void CallCPPToExcuteBP(int Damage);
+
+		UFUNCTION(BluePrintNativeEvent)
+
+		void CallCPPToDefaultExcuteBP(int Damage);
+		void CallCPPToDefaultExcuteBP_Implemetation(int Damage);
+
+		//
+
+
+
 };
+	
