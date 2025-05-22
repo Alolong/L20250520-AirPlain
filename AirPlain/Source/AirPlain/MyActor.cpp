@@ -5,7 +5,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values // 생성자
@@ -32,6 +32,7 @@ AMyActor::AMyActor()
 	}
 	Body->SetRelativeRotation(FRotator(-90.0f, 0, 0)); // body의 relativerotation을 저장한다.
 
+	Movement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
 
 
 
@@ -50,7 +51,9 @@ void AMyActor::BeginPlay()
 	
 
 	SetLifeSpan(3.0f);
-
+	//OnActorBeginOverlap - AActor의 델리게이트- 다른액터가 이 액터에 오버랩시 발생
+	//AddDynamic 동적 델리게이트 바인딩함수(헬퍼 매크로)-위 델리게이트 이벤트가 발생시 소괄호 안의 this(인스턴스)와 함수를 연결해줌
+	OnActorBeginOverlap.AddDynamic(this, &AMyActor::ProcessBeginOverlap);
 
 }
 
@@ -63,13 +66,38 @@ void AMyActor::Tick(float DeltaTime)
 
 void AMyActor::Test()
 {
+
+
 }
 
 void AMyActor::ProcessBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
+	if (OtherActor->ActorHasTag(TEXT("Player")))
+	{
+		return;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
+
+	UGameplayStatics::ApplyDamage(OtherActor,
+		100.0f,
+		nullptr,
+		this,
+		UDamageType::StaticClass()
+	);
+
+
+	//상속된 블루프린트에 무슨 함수 있을꺼야. 그걸 기획자가 만들면 난 그걸 알아서 호출께
+	//CallCPPToExecuteBP(100);
+	CallCPPToDefaultExecuteBP(100);
+
+	Destroy();
 }
 
-void AMyActor::CallCPPToExcuteBP(int Damage)
+
+//기획자가 만들어야 할 함수
+void AMyActor::CallCPPToDefaultExecuteBP(int Damage)
 {
+
+	UE_LOG(LogTemp, Warning, TEXT("이건 CPP 호출 %d"), Damage);
 }
 

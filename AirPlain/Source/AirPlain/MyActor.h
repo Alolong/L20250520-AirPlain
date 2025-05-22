@@ -41,6 +41,9 @@ public:
 		UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Components")
 		TObjectPtr<UProjectileMovementComponent> Movement; //TObject 매크로의 박스 컴포넌트형의 box를 선언
 	
+
+
+		/////////////////////////////////////////////////////////////////////////////////
 		//블루프린트에서 호출 가능
 		UFUNCTION(BlueprintCallable)
 		void Test();
@@ -51,14 +54,21 @@ public:
 		UFUNCTION()
 		void ProcessBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
 
+
+
+
+		//BlueprintImplementableEvent -> CPP에서는 함수를 구현하지 않음 블루프린트에서만 가능
+		//기획자한테 맡기고 싶을때
 		UFUNCTION(BlueprintImplementableEvent)
 
-		void CallCPPToExcuteBP(int Damage);
+		void CallCPPToExecuteBP(int Damage);
 
+
+		//BluePrintNativeEvent- 기본 로직은 CPP에서 두지만 블루프린트에서 오버라이드 가능
+		//기본 동작은 CPP 블루프린트에서 덮어쓰고 싶을 때
 		UFUNCTION(BluePrintNativeEvent)
-
-		void CallCPPToDefaultExcuteBP(int Damage);
-		void CallCPPToDefaultExcuteBP_Implemetation(int Damage);
+		void CallCPPToDefaultExecuteBP(int Damage);
+		void CallCPPToDefaultExecuteBP_Implemetation(int Damage);
 
 		//
 
